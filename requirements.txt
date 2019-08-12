@@ -1,0 +1,4 @@
+django
+django-twilio
+mysqlclient
+phonenumbers
