@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'scaringadmin',
+    'accountkitlogin',
     'django_twilio',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 ]
 
 MIDDLEWARE = [
@@ -47,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 ]
 
 ROOT_URLCONF = 'Scaring.urls'
@@ -130,6 +133,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
@@ -154,3 +158,17 @@ MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 TWILIO_ACCOUNT_SID = 'AC41911dceabb0e8d66dfb0f3041a8d1a4'
 TWILIO_AUTH_TOKEN = '546e1a8504ac0fb90f7c58511348a454'
 TWILIO_PHONE_NUMBER= '+19794727768'
+
+
+APP_ID = '595874397607485'
+ACCOUNT_KIT_APP_SECRET = '5b3cfb6d307806b5ac226200613aa675'
+
+ACCOUNT_KIT_VERSION = "v1.0"
+ACCOUNT_KIT_SUCCESS_REDIRECT = 'https://fijlo.com/'
+# Example ACCOUNT_KIT_SUCCESS_REDIRECT = "http://localhost:8000/success"
+
+# AUTHENTICATION_BACKENDS = (
+#     'accountkitlogin.authenticate.GetOrCreateUser',
+# )
+
+

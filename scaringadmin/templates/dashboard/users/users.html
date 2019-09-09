@@ -13,7 +13,7 @@
 {% block content %}
     <section role="main" class="content-body">
         <header class="page-header">
-            <h2>Admin Dashboard</h2>
+            <h2>Users</h2>
 
             <div class="right-wrapper text-right">
                 <ol class="breadcrumbs">
@@ -22,7 +22,7 @@
                             <i class="fa fa-home"></i>
                         </a>
                     </li>
-                    <li><span>Dashboard</span></li>
+                    <li><span>Dashboard / Users</span></li>
                 </ol>
 
                 <a class="sidebar-right-toggle"><i class="fa fa-chevron-left"></i></a>
@@ -61,6 +61,7 @@
                                 <th>Email</th>
                                 <th>Phone Number</th>
                                 <th>Address</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                             </thead>
@@ -69,24 +70,37 @@
                             {% for user in users %}
                                 <tr>
                                     {% if user.photo == '' %}
-                                    <td><img src="/media/img/users/user_avatar.png" width="50" height="50" class="rounded-circle mr-4"> {{ user.first_name }}</td>
+                                        <td><img src="/media/img/users/user_avatar.png" width="50" height="50"
+                                                 class="rounded-circle mr-4"> {{ user.first_name }}</td>
                                     {% else %}
-                                    <td><img src="/media/img/users/{{ user.photo }}" width="50" height="50" class="rounded-circle mr-4"> {{ user.first_name }}</td>
+                                        <td><img src="/media/img/users/{{ user.photo }}" width="50" height="50"
+                                                 class="rounded-circle mr-4"> {{ user.first_name }}</td>
                                     {% endif %}
 
                                     <td>{{ user.email }}</td>
                                     <td>{{ user.phonenumber }}</td>
                                     <td>{{ user.address }}</td>
+                                    {% if user.status == "0" %}
+                                       <td> <span class="badge badge-danger" style="font-size: 10pt">Blocked</span></td>
+                                    {% else %}
+                                        <td><span class="badge badge-success" style="font-size: 10pt">Active</span></td>
+                                    {% endif %}
                                     <td>
                                         <div class="btn-group flex-wrap">
-                                            <button type="button" class="mb-1 mt-1 mr-1 btn btn-primary btn-sm dropdown-toggle"
+                                            <button type="button"
+                                                    class="mb-1 mt-1 mr-1 btn btn-primary btn-sm dropdown-toggle"
                                                     data-toggle="dropdown" aria-expanded="false">Action <span
                                                     class="caret"></span></button>
                                             <div class="dropdown-menu" role="menu" x-placement="bottom-start"
                                                  style="position: absolute; transform: translate3d(0px, 42px, 0px); top: 0px; left: 0px; will-change: transform;">
-                                                <a class="user_edit dropdown-item text-1" href="#" data-userid="{{ user.id }}">Edit</a>
-                                                <a class="user_block dropdown-item text-1" href="#" data-userid="{{ user.id }}">Block</a>
-                                                <a class="user_delete dropdown-item text-1" href="#" data-userid="{{ user.id }}">Delete</a>
+                                                <a class="user_edit dropdown-item text-1" href="#"
+                                                   data-userid="{{ user.id }}">Edit</a>
+                                                <a class="user_block dropdown-item text-1" href="#"
+                                                   data-userid="{{ user.id }}">Block</a>
+                                                <a class="user_un_block dropdown-item text-1" href="#"
+                                                   data-userid="{{ user.id }}">UnBlock</a>
+                                                <a class="user_delete dropdown-item text-1" href="#"
+                                                   data-userid="{{ user.id }}">Delete</a>
                                             </div>
                                         </div>
                                     </td>
@@ -123,7 +137,8 @@
                         {% csrf_token %}
                         <div class="form-group row">
                             <div class="col-lg-12">
-                                <input type="text" class="form-control" name="full_name" placeholder="Full Name" required>
+                                <input type="text" class="form-control" name="full_name" placeholder="Full Name"
+                                       required>
                             </div>
                         </div>
 
@@ -135,13 +150,15 @@
 
                         <div class="form-group row">
                             <div class="col-lg-12">
-                                <input type="text" class="form-control" name="phonenumber" placeholder="Phone Number" required>
+                                <input type="text" class="form-control" name="phonenumber" placeholder="Phone Number"
+                                       required>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-lg-12">
-                                <input type="password" class="form-control" name="password" placeholder="Password" required>
+                                <input type="password" class="form-control" name="password" placeholder="Password"
+                                       required>
                             </div>
                         </div>
 
@@ -151,9 +168,13 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row" align="center">
                             <div class="col-lg-12">
-                                <input type="file" class="form-control" name="photo" required>
+                                <input type="file" class="form-control" name="photo" src="" required
+                                       onchange="readAddUserURL(this);">
+                                <img id="bash_add_user" src="#" alt="your image" style="margin-top: 10px" height="200"
+                                     width="200"/>
+
                             </div>
                         </div>
 
@@ -196,7 +217,7 @@
                         {% csrf_token %}
 
 
-                         <div class="form-group row">
+                        <div class="form-group row">
                             <div class="col-lg-12">
                                 <input type="text" class="form-control" name="userid" placeholder="userid" hidden>
                             </div>
@@ -204,7 +225,8 @@
 
                         <div class="form-group row">
                             <div class="col-lg-12">
-                                <input type="text" class="form-control" name="full_name" placeholder="Full Name" required>
+                                <input type="text" class="form-control" name="full_name" placeholder="Full Name"
+                                       required>
                             </div>
                         </div>
 
@@ -216,13 +238,15 @@
 
                         <div class="form-group row">
                             <div class="col-lg-12">
-                                <input type="text" class="form-control" name="phonenumber" placeholder="Phone Number" required>
+                                <input type="text" class="form-control" name="phonenumber" placeholder="Phone Number"
+                                       required>
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-lg-12">
-                                <input type="password" class="form-control" name="password" placeholder="Password" required>
+                                <input type="password" class="form-control" name="password" placeholder="Password"
+                                       required>
                             </div>
                         </div>
 
@@ -232,15 +256,19 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row" align="center">
                             <div class="col-lg-12">
-                                <input type="file" class="form-control" name="photo">
+                                <input type="file" class="form-control" name="photo" onchange="readURL(this);">
+                                <img id="blah" src="#" alt="your image" style="margin-top: 10px" height="200"
+                                     width="200"/>
+
                             </div>
                         </div>
 
                         <div class="form-group row">
                             <div class="col-lg-12">
-                                <button type="submit" class="mb-1 mt-1 mr-1 btn btn-primary btn-block">Update User</button>
+                                <button type="submit" class="mb-1 mt-1 mr-1 btn btn-primary btn-block">Update User
+                                </button>
                             </div>
                         </div>
 
@@ -277,11 +305,11 @@
 
                         <div class="form-group row">
                             <div class="col-lg-12">
-                               <h3>Are you sure you want to delete the user?</h3>
+                                <h3>Are you sure you want to delete the user?</h3>
                             </div>
                         </div>
 
-                         <div class="form-group row">
+                        <div class="form-group row">
                             <div class="col-lg-12">
                                 <input type="text" class="form-control" name="userid" placeholder="userid" hidden>
                             </div>
@@ -303,7 +331,7 @@
 
 
 
-     <div class="modal" id="modal_block_user">
+    <div class="modal" id="modal_block_user">
         <div class="modal-dialog">
             <div class="modal-content">
                 <!-- Modal Header -->
@@ -325,11 +353,11 @@
 
                         <div class="form-group row">
                             <div class="col-lg-12">
-                               <h3>Are you sure you want to block the user?</h3>
+                                <h3>Are you sure you want to block the user?</h3>
                             </div>
                         </div>
 
-                         <div class="form-group row">
+                        <div class="form-group row">
                             <div class="col-lg-12">
                                 <input type="text" class="form-control" name="block_userid" placeholder="userid" hidden>
                             </div>
@@ -348,6 +376,56 @@
             </div>
         </div>
     </div>
+
+
+
+
+    <div class="modal" id="modal_un_block_user">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">UnBlock User</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <strong>Oh snap!</strong> {{ error }}
+                        </div>
+                    {% endif %}
+                    <form action="{% url "unBlockUser" %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <h3>Are you sure you want to un block the user?</h3>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="block_userid" placeholder="userid" hidden>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button type="submit" class="mb-1 mt-1 mr-1 btn btn-danger pull-right">Un Block</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 
 
 
@@ -372,38 +450,41 @@
         $('#datatable-default').dataTable({});
 
         $('#btn_add_user').click(function () {
-                    $('input[name="full_name"]').val('');
-                    $('input[name="email"]').val('');
-                    $('input[name="phonenumber"]').val('');
-                    $('input[name="address"]').val('');
+            var photo = '/media/img/users/user_avatar.png';
+            $('input[name="full_name"]').val('');
+            $('input[name="email"]').val('');
+            $('input[name="phonenumber"]').val('');
+            $('input[name="address"]').val('');
+            $('#bash_add_user').attr('src', photo)
+
             $('#modal_add_user').modal();
         });
-
 
 
         $('a.user_edit').click(function () {
             var userid = $(this).data('userid');
             $('input[name="userid"]').val(userid);
 
-             $.ajax({
+            $.ajax({
                 type: 'get',
                 url: 'getUser',
                 data: {
                     userid: userid
                 },
                 dataType: 'json',
-                 success: function (data) {
+                success: function (data) {
+                    var photo = '/media/img/users/' + data.photo;
                     $('input[name="full_name"]').val(data.first_name);
                     $('input[name="email"]').val(data.username);
                     $('input[name="phonenumber"]').val(data.phonenumber);
                     $('input[name="address"]').val(data.address);
+                    $('#blah').attr('src', photo)
                     $('#modal_edit_user').modal();
                 },
-                error: function (data) {}
+                error: function (data) {
+                }
             })
         });
-
-
 
 
         $('a.user_delete').click(function () {
@@ -416,7 +497,45 @@
             var userid = $(this).data('userid');
             $('input[name="block_userid"]').val(userid);
             $('#modal_block_user').modal();
-        })
+        });
+
+
+
+        $('a.user_un_block').click(function () {
+            var userid = $(this).data('userid');
+            $('input[name="block_userid"]').val(userid);
+            $('#modal_un_block_user').modal();
+        });
+
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result)
+                        .width(200)
+                        .height(200);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        function readAddUserURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#bash_add_user')
+                        .attr('src', e.target.result)
+                        .width(200)
+                        .height(200);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
 
     </script>

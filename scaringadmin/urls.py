@@ -16,6 +16,9 @@ urlpatterns = [
     path('sendEmailApi', views.sendEmailApi, name='sendEmailApi'),
     path('imageDownloadApi', views.imageDownloadApi, name='imageDownloadApi'),
 
+    path('success', views.success_page, name='success'),
+    path('accountKit', views.accountKit, name='accountKit'),
+
     # -------------------- ADMIN DASHBOARD -----------------------
     path('', views.index, name='admin_index'),
     path('users', views.userList, name='users'),
@@ -27,17 +30,30 @@ urlpatterns = [
     path('deleteUser', views.deleteUser, name='deleteUser'),
     path('getMinedData', views.getMinedData, name='getMinedData'),
     path('blockUser', views.blockUser, name='blockUser'),
+    path('unBlockUser', views.unBlockUser, name='unBlockUser'),
     path('scarpingSettings', views.scarpingSettings, name='scarpingSettings'),
     path('apiSettings', views.apiSettings, name='apiSettings'),
     path('emailSettings', views.emailSettings, name='emailSettings'),
     path('smsSettings', views.smsSettings, name='smsSettings'),
-    path('scraperSettings', views.scraperSettings, name='scraperSettings'),
+    path('proxySettings', views.proxySettings, name='proxySettings'),
     path('addSite', views.addSite, name='addSite'),
     path('getSite', views.getSite, name='getSite'),
     path('editSite', views.editSite, name='editSite'),
     path('deleteSite', views.deleteSite, name='deleteSite'),
+    path('updateCronJobStatus', views.updateCronJobStatus, name='updateCronJobStatus'),
     path('update_email_setting', views.update_email_setting, name='update_email_setting'),
     path('updateTwilio', views.updateTwilio, name='updateTwilio'),
+    path('updateFacebookAccountKit', views.updateFacebookAccountKit, name='updateFacebookAccountKit'),
+    path('getEveyMonthData', views.getEveyMonthData, name='updateTwilio'),
+    path('user_profile', views.user_profile, name='user_profile'),
+    path('edit_user_profile', views.edit_user_profile, name='edit_user_profile'),
+    path('addProxy', views.addProxy, name='addProxy'),
+    path('deleteProxy', views.deleteProxy, name='deleteProxy'),
+    path('setProxy', views.setProxy, name='setProxy'),
+    path('removeData', views.removeData, name='removeData'),
+    path('getMinedDataByID', views.getMinedDataByID, name='getMinedDataByID'),
+    path('updateMinedData', views.updateMinedData, name='updateMinedData'),
+    path('update_admin_email', views.update_admin_email, name='update_admin_email'),
 
 ]
 

@@ -15,7 +15,7 @@
 {% block content %}
     <section role="main" class="content-body">
         <header class="page-header">
-            <h2>Admin Dashboard</h2>
+            <h2>Dashboard</h2>
 
             <div class="right-wrapper text-right">
                 <ol class="breadcrumbs">
@@ -24,7 +24,7 @@
                             <i class="fa fa-home"></i>
                         </a>
                     </li>
-                    <li><span>Dashboard</span></li>
+                    <li><span>Dashboard / Dashboard</span></li>
                 </ol>
 
                 <a class="sidebar-right-toggle"><i class="fa fa-chevron-left"></i></a>
@@ -135,12 +135,22 @@
 	Chartist: Bar Chart - Overlapping On Mobile
 	*/
 	(function() {
-		if( $('#ChartistOverlappingBarsOnMobile').get(0) ) {
+
+
+	     $.ajax({
+                type: 'get',
+                url: 'getEveyMonthData',
+                data: {
+                },
+                dataType: 'json',
+                 success: function (data1) {
+
+
+                    	if( $('#ChartistOverlappingBarsOnMobile').get(0) ) {
 			var data = {
 				labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 				series: [
-					[5, 4, 3, 7, 5, 10, 3, 4, 8, 10, 6, 8],
-					[3, 2, 9, 5, 4, 6, 4, 6, 7, 8, 7, 4]
+					data1
 				]
 			};
 
@@ -161,6 +171,18 @@
 
 			new Chartist.Bar('#ChartistOverlappingBarsOnMobile', data, options, responsiveOptions);
 		}
+
+
+
+
+                },
+                error: function (data) {}
+            });
+
+
+
+
+
 	})();
 
 

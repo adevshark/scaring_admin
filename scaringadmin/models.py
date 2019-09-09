@@ -29,7 +29,7 @@ class MinedData(models.Model):
     location = models.CharField(max_length=255, blank=True, null=True)
     category = models.CharField(max_length=255, blank=True, null=True)
     username = models.CharField(max_length=100, blank=True, null=True)
-    phonenumber = models.CharField(max_length=50, blank=True, null=True)
+    phonenumber = models.TextField(blank=True, null=True)
     email = models.CharField(max_length=50, blank=True, null=True)
     time = models.DateTimeField(blank=True, null=True)
     link = models.CharField(max_length=255, blank=True, null=True)
@@ -38,6 +38,9 @@ class MinedData(models.Model):
     image_folder = models.CharField(max_length=50, blank=True, null=True)
     product_id = models.CharField(max_length=50, blank=True, null=True)
     image_name = models.CharField(max_length=50, blank=True, null=True)
+    posted_at = models.CharField(max_length=100, blank=True, null=True)
+    month = models.CharField(max_length=50, blank=True, null=True)
+    site_id = models.IntegerField(blank=True, null=True)
 
 
 class EmailSettings(models.Model):
@@ -47,6 +50,7 @@ class EmailSettings(models.Model):
     smtp_password = models.CharField(max_length=50, blank=True, null=True)
     isEnabledSmtp = models.CharField(max_length=10, blank=True, null=True)
     isEnabledSmtpSSL = models.CharField(max_length=10, blank=True, null=True)
+    admin_email = models.CharField(max_length=255, blank=True, null=True)
 
 
 class TwilioAccountSettings(models.Model):
@@ -67,3 +71,11 @@ class SiteList(models.Model):
     start_time = models.DateTimeField(blank=True, null=True)
     end_time = models.DateTimeField(blank=True, null=True)
     directory_name = models.CharField(max_length=200, blank=True, null=True)
+    cron_time = models.TimeField(blank=True, null=True)
+    cron_status = models.CharField(max_length=50, blank=False, null=False, default="Stop", editable=False)
+
+
+class Proxy(models.Model):
+    username = models.CharField(max_length=100, blank=True, null=True)
+    password = models.CharField(max_length=255, blank=True, null=True)
+    ip = models.CharField(max_length=255, blank=True, null=True)

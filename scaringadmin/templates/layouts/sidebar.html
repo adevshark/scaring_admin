@@ -32,7 +32,7 @@
                         <li {% if request.path == "/sites" %} class="nav-active" {% endif %}>
                             <a class="nav-link" href="{% url "sites" %}">
                                 <i class="fa fa-sitemap" aria-hidden="true"></i>
-                                <span>Sites</span>
+                                <span>Sites & Scraper Setting</span>
                             </a>
                         </li>
                         <li {% if request.path == "/data" %} class="nav-active" {% endif %}>
@@ -74,10 +74,11 @@
                                 </li>
 
                                 <li>
-                                    <a class="nav-link" href="{% url "scraperSettings" %}">
-                                         Scraper Settings
+                                    <a class="nav-link" href="{% url "proxySettings" %}">
+                                         Proxy Settings
                                     </a>
                                 </li>
+
                             </ul>
                         </li>
                     </ul>

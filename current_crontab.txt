@@ -1,0 +1,8 @@
+MAILTO=""
+2	15	*	*	*	/opt/psa/admin/bin/php -dauto_prepend_file=sdk.php '/opt/psa/admin/plib/modules/catalog/scripts/update-index.php'
+0,10,20,30,40,50	*	*	*	*	/opt/psa/admin/bin/php -dauto_prepend_file=sdk.php '/opt/psa/admin/plib/modules/plesk-mobile/scripts/push_worker.php'
+0	0	*	*	*	/opt/psa/admin/bin/php -dauto_prepend_file=sdk.php '/opt/psa/admin/plib/modules/symantec/scripts/symantec-clean-tasks.php'
+*	*	*	*	*	/usr/local/bin/scrapy runspider '/root/avito/avito/spiders/tayara_spider.py'
+
+### Comment here if you like
+* * * * * Put your command here

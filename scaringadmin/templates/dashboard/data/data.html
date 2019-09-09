@@ -13,17 +13,41 @@
             text-align: center;
         }
 
+        td.other {
+            word-break: break-all;
+        }
+
+        td.title_width {
+            width: 50px;
+            word-break: break-all;
+        }
+
+        td.description_width {
+            width: 300px;
+            word-break: break-all;
+        }
+
     </style>
+
+    <style>
+	#selectedFiles img {
+		max-width: 125px;
+		max-height: 125px;
+		float: left;
+		margin-bottom:10px;
+	}
+</style>
+
 
     <link rel="stylesheet" href="{% static 'client/assets/vendor/datatables/media/css/dataTables.bootstrap4.css' %}"/>
 
 
-{% endblock %}
+{% endblock %}l
 
 {% block content %}
     <section role="main" class="content-body">
         <header class="page-header">
-            <h2>Admin Dashboard</h2>
+            <h2>Data</h2>
 
             <div class="right-wrapper text-right">
                 <ol class="breadcrumbs">
@@ -32,9 +56,8 @@
                             <i class="fa fa-home"></i>
                         </a>
                     </li>
-                    <li><span>Dashboard</span></li>
+                    <li><span>Dashboard / Data</span></li>
                 </ol>
-
                 <a class="sidebar-right-toggle"><i class="fa fa-chevron-left"></i></a>
             </div>
         </header>
@@ -43,7 +66,13 @@
         <div class="row">
             <div class="col-xl-12 col-md-12">
                 <header class="page-header1">
-                    <h2>Data</h2>
+                    <h2 style="display: inline">Data</h2>
+                    <select id="site_filter" class="pull-right" style="height: 35px; width: 250px">
+                        <option value="0"> All</option>
+                        {% for item in siteList %}
+                            <option value="{{ item.id }}"> {{ item.site_url }}</option>
+                        {% endfor %}
+                    </select>
                 </header>
                 <section class="card card-featured-left card-featured-primary mb-3">
                     <div class="card-body">
@@ -52,17 +81,19 @@
                         <table class="table table-bordered table-striped mb-0" id="datatable-tabletools">
                             <thead>
                             <tr>
-                                <th>Title(Name)</th>
-                                <th>Description</th>
+                                <th style="width: 50px; word-break: break-all">Title(Name)</th>
+                                <th style="width: 300px; word-break: break-all">Description</th>
                                 <th>Image</th>
                                 <th>Price</th>
                                 <th>Currency</th>
                                 <th>Location</th>
-                                <th>Category</th>
-                                <th>Username(ad owner)</th>
-                                <th>Phone number</th>
+                                <th style="word-break: break-all">Category</th>
+                                <th>Username<br>(ad owner)</th>
+                                <th style="word-break: break-all">Phone<br>number</th>
                                 <th>Email</th>
-                                <th>DateTime</th>
+                                <th style="word-break: break-all">PostedAt</th>
+                                <th style="word-break: break-all">Site</th>
+                                <th></th>
                             </tr>
                             </thead>
                         </table>
@@ -86,14 +117,157 @@
                 <!-- Modal body -->
                 <div class="modal-body">
                     <div class="form-group row">
-                        <div class="popup-gallery">
-                            <a class="float-left mb-1 mr-1" href="img/projects/project.jpg" title="Project 1">
-                                <div class="img-fluid">
+                        <div class="popup-gallery" style="padding: 15px">
 
-                                </div>
-                            </a>
                         </div>
                     </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal" id="modal_delete_data">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <form action="" method="post">
+                        {% csrf_token %}
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <h3>Are you sure you want to delete the data?</h3>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button type="button" class="mb-1 mt-1 mr-1 btn btn-danger pull-right" id="btn_delete">
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="modal" id="modal_edit_data">
+
+
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Data</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <form action="" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="title" placeholder="Title">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <textarea type="text" id="textarea" class="form-control" name="description" placeholder="Description" rows="5"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="price" placeholder="Price" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="currency" placeholder="Currency"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="location" placeholder="Location"
+                                       required>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="category" placeholder="Category"
+                                       required>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="username" placeholder="Username" required>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="phonenumber" placeholder="phonenumber"
+                                       required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="email" placeholder="Email" required>
+                            </div>
+                        </div>
+
+
+
+                        Files: <input type="file" id="files" name="files" multiple accept="image/*"><br/>
+                        <div id="selectedFiles"></div>
+
+
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button type="button" class="mb-1 mt-1 mr-1 btn btn-primary btn-block" id="btn_edit">
+                                    Update Data
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+
                 </div>
 
             </div>
@@ -133,7 +307,50 @@
 
 {% block page_js %}
 
+
     <script>
+        var selDiv = "";
+
+        document.addEventListener("DOMContentLoaded", init, false);
+
+        function init() {
+            document.querySelector('#files').addEventListener('change', handleFileSelect, false);
+            selDiv = document.querySelector("#selectedFiles");
+        }
+
+        function handleFileSelect(e) {
+
+            if (!e.target.files || !window.FileReader) return;
+
+            selDiv.innerHTML = "";
+
+            var files = e.target.files;
+            var filesArr = Array.prototype.slice.call(files);
+            filesArr.forEach(function (f, i) {
+                var f = files[i];
+                if (!f.type.match("image.*")) {
+                    return;
+                }
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var html = "<img src=\"" + e.target.result + "\">" + f.name + "<br clear=\"left\"/>";
+                    selDiv.innerHTML += html;
+                }
+                reader.readAsDataURL(f);
+            });
+
+        }
+    </script>
+
+
+
+    <script>
+
+        var site_id = 0;
+
+        var table = ""
+
         function format(d) {
             // `d` is the original data object for the row
             return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
@@ -148,7 +365,7 @@
             var datatableInit = function () {
                 var $table = $('#datatable-tabletools');
 
-                var table = $table.DataTable({
+                table = $table.DataTable({
 
                     "processing": true,
                     "serverSide": true,
@@ -168,7 +385,8 @@
                         "url": "{% url "getMinedData" %}",
                         "type": "POST",
                         "data": function (d) {
-                            d.csrfmiddlewaretoken = $('{% csrf_token %}').val()
+                            d.csrfmiddlewaretoken = $('{% csrf_token %}').val();
+                            d.site_id = site_id;
                         }
                     },
                     "pageLength": 10,
@@ -191,47 +409,86 @@
                             "data": "title",
                         },
                         {
-                            "className": 'details-control',
+                            "className": 'description_width details-control1',
                             "orderable": false,
-                            "data": null,
-                            "defaultContent": '<i class="fa fa-plus"></i>',
+                            "data": "description",
+                            {#"defaultContent": '<i class="fa fa-plus"></i>',#}
                         },
 
                         {
-                            "data": "image",
-                            "render": function (data) {
-                                var result = data.split('|');
-                                var imagesString = "'" + data + "'";
+                            "className": 'other',
+                            "data": "image_name",
+                            "render": function (data, i, row, meta) {
                                 var out = "";
-                                var count = result.length;
-                                out += '<a href="javascript:viewImage(' + imagesString + ')" data-images="' + data + '" ><img src="' + result[0] + '" width="60" height="60" class="mb-1"><br></a>';
+                                var count = 0;
+                                var imagesString = "";
+                                var result = [];
+
+                                if (data != null && data !== "") {
+                                    result = data.split('|');
+                                    imagesString = "'" + data + "'";
+                                    count = result.length;
+                                    out += '<a href="javascript:viewImage(' + imagesString + ')" data-images="' + data + '" ><img src="' + result[0] + '" width="60" height="60" class="mb-1"><br></a>';
+                                    out += '<div style="height: 0; width:0.1px; color:white; font-size:0.1px; visibility: hidden;">'+ data +'</div>';
+                                } else {
+                                    count = 0;
+                                    imagesString = "";
+                                    result = [];
+                                }
+
                                 out += "<div style='color: blue; text-align: center;'> (" + count + ")</span>"
+
                                 return out;
                             }
                         },
                         {
+                            "className": 'other',
                             "data": "price",
                         },
                         {
+                            "className": 'other',
                             "data": "currency",
                         },
                         {
+                            "className": 'other',
                             "data": "location",
                         },
                         {
+                            "className": 'other',
                             "data": "category",
                         },
                         {
+                            "className": 'other',
                             "data": "username",
                         },
                         {
+                            "className": 'other',
                             "data": "phonenumber",
                         },
                         {
+                            "className": 'other',
                             "data": "email",
                         },
                         {
-                            "data": "time",
+                            "className": 'other',
+                            "data": "posted_at",
+                        },
+                        {
+                            "className": 'other',
+                            "data": "site",
+                        },
+                        {
+                            "className": 'other',
+                            "data": "site",
+                            "render": function (data, type, row, meta) {
+                                var act = "<div class=\"btn-group flex-wrap\">";
+                                act += "<button type=\"button\" class=\"mb-1 mt-1 mr-1 btn btn-primary btn-sm dropdown-toggle\" data-toggle=\"dropdown\" aria-expanded=\"false\">Action <span class=\"caret\"></span></button>";
+                                act += "<div class=\"dropdown-menu\" role=\"menu\" x-placement=\"bottom-start\" style=\"position: absolute; transform: translate3d(0px, 42px, 0px); top: 0px; left: 0px; will-change: transform;\">";
+                                act += '<a class="user_edit dropdown-item text-1" href="javascript:edit(' + row.id + ')">Edit</a>';
+                                act += '<a class="user_delete dropdown-item text-1" href="javascript:remove(' + row.id + ')">Delete</a>';
+                                act += '</div> </div>';
+                                return act;
+                            }
                         }
                     ],
 
@@ -258,6 +515,13 @@
                         $(this).append("<i class=\"fa fa-minus\"></i>")
                     }
                 });
+
+
+                $('#site_filter').change(function () {
+                    site_id = this.value;
+                    table.draw();
+                })
+
             };
 
             $(function () {
@@ -272,7 +536,7 @@
             var images = data.split('|');
             var out = "";
             images.map((item) => {
-                out += '<a class="float-left mb-1 mr-1" href="'+ item +'" title="Project 1"><div class="img-fluid"><img src="'+ item +'" width="105"></div></a>';
+                out += '<a class="float-left mb-1 mr-1" href="' + item + '" title="Project 1"><div class="img-fluid"><img src="' + item + '" width="105"></div></a>';
             });
 
             $('.popup-gallery').append(out);
@@ -295,6 +559,104 @@
                 tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
             }
         });
+
+
+        var data_id = 0;
+
+        function edit(id) {
+            selDiv.innerHTML = "";
+
+            data_id = id;
+            $.ajax({
+                method: "post",
+                url: "getMinedDataByID",
+                data: {
+                    "id": id
+                },
+                success: function (data) {
+                    $('input[name="title"]').val(data.title);
+                    document.getElementById("textarea").innerHTML = data.description;
+                    $('textarea[name="description"]').innerHTML = data.description;
+                    $('input[name="price"]').val(data.price);
+                    $('input[name="currency"]').val(data.currency);
+                    $('input[name="location"]').val(data.location);
+                    $('input[name="category"]').val(data.category);
+                    $('input[name="username"]').val(data.username);
+                    $('input[name="phonenumber"]').val(data.phonenumber);
+                    $('input[name="email"]').val(data.email);
+                    $('#modal_edit_data').modal();
+                },
+                error: function (data) {
+                    $('#modal_edit_data').modal("hide");
+                    alert("ERROR")
+
+                }
+            })
+        }
+
+
+        $('#btn_edit').click(function () {
+
+            var data = new FormData();
+            $.each($("#files")[0].files, function(i, file) {
+                data.append("file", file);
+            });
+
+            data.append("id",data_id);
+            data.append("title", $('input[name="title"]').val());
+            data.append("description", $('textarea[name="description"]').val());
+            data.append("price", $('input[name="price"]').val());
+            data.append("currency", $('input[name="currency"]').val());
+            data.append("location", $('input[name="location"]').val());
+            data.append("category", $('input[name="category"]').val());
+            data.append("username", $('input[name="username"]').val());
+            data.append("phonenumber", $('input[name="phonenumber"]').val());
+            data.append("email", $('input[name="email"]').val());
+
+            $.ajax({
+                method: "post",
+                url: "updateMinedData",
+                data: data,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    $('#modal_edit_data').modal("hide");
+                    table.draw('page');
+                },
+                error: function (data) {}
+            })
+        });
+
+
+
+        function remove(id) {
+            data_id = id;
+            $('#modal_delete_data').modal();
+        }
+
+
+        $('#btn_delete').click(function () {
+            $.ajax({
+                method: "post",
+                url: "removeData",
+                data: {
+                    "id": data_id
+                },
+                success: function (data) {
+                    $('#modal_delete_data').modal("hide");
+                    table.draw('page');
+                },
+                error: function (data) {
+                    $('#modal_delete_data').modal("hide");
+
+                }
+            })
+        })
+
+
+
+
 
 
     </script>

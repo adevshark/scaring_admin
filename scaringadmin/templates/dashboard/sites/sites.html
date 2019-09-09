@@ -13,7 +13,7 @@
 {% block content %}
     <section role="main" class="content-body">
         <header class="page-header">
-            <h2>Admin Dashboard</h2>
+            <h2>Sites & Scrapper Setting</h2>
 
             <div class="right-wrapper text-right">
                 <ol class="breadcrumbs">
@@ -22,7 +22,7 @@
                             <i class="fa fa-home"></i>
                         </a>
                     </li>
-                    <li><span>Dashboard</span></li>
+                    <li><span>Dashboard / Sites</span></li>
                 </ol>
 
                 <a class="sidebar-right-toggle"><i class="fa fa-chevron-left"></i></a>
@@ -60,9 +60,11 @@
                                 <th>Site Name</th>
                                 <th>Site Url</th>
                                 <th>DirectoryName</th>
-                                <th>Status</th>
-                                <th>StartTime</th>
-                                <th>EndTime</th>
+                                <th>CronTime</th>
+                                <th>CronStatus</th>
+                                <th>ScrapStatus</th>
+                                <th>StartedTime</th>
+                                <th>EndedTime</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -73,6 +75,8 @@
                                     <td>{{ item.site_name }}</td>
                                     <td><a href="{{ item.site_url }}" target="_blank">{{ item.site_url }}</a></td>
                                     <td>{{ item.directory_name }}</td>
+                                    <td>{{ item.cron_time }}</td>
+                                    <td>{{ item.cron_status }}</td>
                                     <td>{{ item.scraped_status }}</td>
                                     <td>{{ item.start_time }}</td>
                                     <td>{{ item.end_time }}</td>
@@ -87,8 +91,10 @@
                                                  style="position: absolute; transform: translate3d(0px, 42px, 0px); top: 0px; left: 0px; will-change: transform;">
                                                 <a class="site_edit dropdown-item text-1" href="#"
                                                    data-siteid="{{ item.id }}">Edit</a>
-                                                <a class="user_delete dropdown-item text-1" href="#"
-                                                   data-siteid="{{ item.id }}">Delete</a>
+                                                <a class="user_delete dropdown-item text-1" href="#" data-siteid="{{ item.id }}">Delete</a>
+                                                <a class="cron_start dropdown-item text-1" href="#" data-siteid="{{ item.id }}">Cron Start</a>
+                                                <a class="cron_stop dropdown-item text-1" href="#" data-siteid="{{ item.id }}">Cron Stop</a>
+                                                <a class="cron_pause dropdown-item text-1" href="#" data-siteid="{{ item.id }}">Cron Pause</a>
                                             </div>
                                         </div>
                                     </td>
@@ -141,6 +147,14 @@
                                 <input type="text" class="form-control" name="directory_name" placeholder="Directory Name" required>
                             </div>
                         </div>
+
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <input type="time" class="form-control" name="cron_time" placeholder="Cron Time" required>
+                            </div>
+                        </div>
+
 
                         <div class="form-group row">
                             <div class="col-lg-12">
@@ -202,6 +216,12 @@
                         <div class="form-group row">
                             <div class="col-lg-12">
                                 <input type="text" class="form-control" name="directory_name" placeholder="Directory Name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <input type="time" class="form-control" name="cron_time" placeholder="Cron Time" required>
                             </div>
                         </div>
 
@@ -271,6 +291,64 @@
 
 
 
+      <div class="modal" id="modal_cron_start">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Udate Cron Job</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    {% if error %}
+                        <div class="alert alert-danger">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <strong>Oh snap!</strong> {{ error }}
+                        </div>
+                    {% endif %}
+                    <form action="{% url "updateCronJobStatus" %}" method="post">
+                        {% csrf_token %}
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <span style="font-size: 16pt">Are you sure you want to </span><span id="cron_status_txt" style="font-size: 16pt"></span>  <span style="font-size: 16pt"> the cron job?</span>
+                            </div>
+                        </div>
+
+                         <div class="form-group row hidden">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="siteid" placeholder="siteid" >
+                            </div>
+                        </div>
+
+                        <div class="form-group row hidden">
+                            <div class="col-lg-12">
+                                <input type="text" class="form-control" name="cron_status" placeholder="" >
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-lg-12">
+                                <button type="submit" class="mb-1 mt-1 mr-1 btn btn-danger pull-right">Post</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
 {% endblock %}
 
 {% block js %}
@@ -294,6 +372,9 @@
         $('#btn_add_user').click(function () {
                     $('input[name="site_name"]').val('');
                     $('input[name="site_url"]').val('');
+                    $('input[name="directory_name"]').val('');
+                    $('input[name="cron_time"]').val('');
+
             $('#modal_add_site').modal();
         });
 
@@ -327,7 +408,35 @@
             var siteid = $(this).data('siteid');
             $('input[name="siteid"]').val(siteid);
             $('#modal_delete_site').modal();
+        });
+
+
+       $('a.cron_start').click(function () {
+            var siteid = $(this).data('siteid');
+            $('input[name="siteid"]').val(siteid);
+            $('input[name="cron_status"]').val("Start");
+            $('#cron_status_txt').text("start");
+            $('#modal_cron_start').modal();
+        });
+
+
+       $('a.cron_stop').click(function () {
+            var siteid = $(this).data('siteid');
+            $('input[name="siteid"]').val(siteid);
+            $('input[name="cron_status"]').val("Stop");
+            $('#cron_status_txt').text("stop");
+            $('#modal_cron_start').modal();
+        });
+
+
+        $('a.cron_pause').click(function () {
+            var siteid = $(this).data('siteid');
+            $('input[name="siteid"]').val(siteid);
+            $('input[name="cron_status"]').val("Pause");
+            $('#cron_status_txt').text("pause");
+            $('#modal_cron_start').modal();
         })
+
 
 
 

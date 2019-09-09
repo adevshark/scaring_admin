@@ -2,140 +2,336 @@
 
 <!doctype html>
 <html class="fixed">
-	<head>
+<head>
 
-		<!-- Basic -->
-		<meta charset="UTF-8">
+    <!-- Basic -->
+    <meta charset="UTF-8">
 
-        <title>Admin</title>
-		<meta name="keywords" content="Question Answer How What" />
-		<meta name="description" content="CherryCert">
-		<meta name="author" content="encoad">
+    <title>Admin</title>
+    <meta name="keywords" content="Question Answer How What"/>
+    <meta name="description" content="CherryCert">
+    <meta name="author" content="encoad">
 
-		<!-- Mobile Metas -->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
-		<!-- Web Fonts  -->
-		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light" rel="stylesheet" type="text/css">
-
-
-		<!-- Vendor CSS -->
-		<link rel="stylesheet" href="{% static 'client/assets/vendor/bootstrap/css/bootstrap.css' %}" />
-		<link rel="stylesheet" href="{% static 'client/assets/vendor/animate/animate.css' %}">
-
-		<link rel="stylesheet" href="{% static 'client/assets/vendor/font-awesome/css/font-awesome.css' %}" />
-		<link rel="stylesheet" href="{% static 'client/assets/vendor/magnific-popup/magnific-popup.css' %}" />
-		<link rel="stylesheet" href="{% static 'client/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css' %}" />
-
-		<!-- Specific Page Vendor CSS -->
-		<link rel="stylesheet" href="{% static 'client/assets/vendor/owl.carousel/assets/owl.carousel.css' %}" />
-		<link rel="stylesheet" href="{% static 'client/assets/vendor/owl.carousel/assets/owl.theme.default.css' %}" />
-
-		<!-- Theme CSS -->
-		<link rel="stylesheet" href="{% static 'client/assets/css/theme.css' %}" />
-
-		<!-- Skin CSS -->
-		<link rel="stylesheet" href="{% static 'client/assets/css/skins/default.css' %}" />
-
-		<!-- Theme Custom CSS -->
-		<link rel="stylesheet" href="{% static 'client/assets/css/custom.css' %}">
-
-		<!-- Head Libs -->
-		<script src="{% static 'client/assets/vendor/modernizr/modernizr.js' %}"></script>
-
-	</head>
-	<body>
-
-		<!-- start: page -->
-		<section class="body-sign">
-			<div class="mt-5">
-				<div class="panel card-sign">
-					<div class="card-body">
-
-                        {% if messages %}
-                            {% for message in messages %}
-                                <div class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}"
-                                     role="alert">{{ message }}</div>
-                            {% endfor %}
-                        {% endif %}
+    <!-- Web Fonts  -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light"
+          rel="stylesheet" type="text/css">
 
 
-                        {% if error %}
-                            <div class="alert alert-danger">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                <strong>Oh snap!</strong> {{ error }}
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="{% static 'client/assets/vendor/bootstrap/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" href="{% static 'client/assets/vendor/animate/animate.css' %}">
+
+    <link rel="stylesheet" href="{% static 'client/assets/vendor/font-awesome/css/font-awesome.css' %}"/>
+    <link rel="stylesheet" href="{% static 'client/assets/vendor/magnific-popup/magnific-popup.css' %}"/>
+    <link rel="stylesheet"
+          href="{% static 'client/assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css' %}"/>
+
+    <!-- Specific Page Vendor CSS -->
+    <link rel="stylesheet" href="{% static 'client/assets/vendor/owl.carousel/assets/owl.carousel.css' %}"/>
+    <link rel="stylesheet" href="{% static 'client/assets/vendor/owl.carousel/assets/owl.theme.default.css' %}"/>
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="{% static 'client/assets/css/theme.css' %}"/>
+
+    <!-- Skin CSS -->
+    <link rel="stylesheet" href="{% static 'client/assets/css/skins/default.css' %}"/>
+
+    <!-- Theme Custom CSS -->
+    <link rel="stylesheet" href="{% static 'client/assets/css/custom.css' %}">
+
+    <!-- Head Libs -->
+    <script src="{% static 'client/assets/vendor/modernizr/modernizr.js' %}"></script>
+
+</head>
+<body>
+
+<!-- start: page -->
+<section class="body-sign">
+    <div class="mt-5">
+        <div class="panel card-sign" style="margin-top: 220px">
+            <div class="card-body" style="border-top-color: #242939; background-color: #242939; border-radius: 3px">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}danger{% else %}{{ message.tags }}{% endif %}{% endif %}"
+                             role="alert">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+
+                {% if error %}
+                    <div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <strong>Oh snap!</strong> {{ error }}
+                    </div>
+                {% endif %}
+
+                <form action="{% url 'phonenumberverify' %}" method="post" id="form_phone_verify">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+
+                        <div class="input-group input-group-icon">
+                            <input name="email" type="email" class="form-control form-control-lg"
+                                   placeholder="Email or Phone number"/>
+                            <span class="input-group-addon">
+										<span class="icon icon-lg">
+											<i style="color: #242939" class="fa fa-user"></i>
+										</span>
+									</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+
+                        <div class="input-group input-group-icon">
+                            <input name="password" type="password" class="form-control form-control-lg"
+                                   placeholder="Password"/>
+                            <span class="input-group-addon">
+										<span class="icon icon-lg">
+											<i style="color: #242939" class="fa fa-lock"></i>
+										</span>
+									</span>
+                        </div>
+                    </div>
+
+
+                    <div class="mb-5 text-center">
+                        <button style="background-color: #F67C2A; border: 3px solid #F67C2A"
+                                class="btn mb-2 btn-block  btn-primary form-control form-control-lg" type="button"
+                                id="btn_login">Login
+                        </button>
+                    </div>
+
+
+                    <div class="mb-1 text-center" style=" border: 3px solid #70AD47 !important; border-radius: 3px">
+                        <a href="{% url 'forgetpassword' %}" class="btn btn-block  btn-primary" type="submit"
+                           style="background-color: #242939">Reset Password</a>
+                    </div>
+
+                    <div class="mb-1 text-center hidden">
+                        <a class="btn mb-2 ml-1 btn-block mr-1 btn-secondary" href="{% url 'sign_up' %}">Signup</a>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- end: page -->
+
+
+<div class="modal" id="modal_verifycode">
+    <div class="modal-dialog">
+        <div class="modal-content" style="margin-top: 180px">
+
+            <div class="panel card-sign">
+                <div class="card-body"
+                     style="border-top-color: #242939; background-color: #242939; border-radius: 3px; height: 400px">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="form-group" align="center" style="padding-top: 90px">
+                            <div class="every_number input-group input-group-icon center" align="center"
+                                 style="height: 80px">
+                                <input type="text" maxlength="1"
+                                       style="padding-right: 12px; margin-left:  10px;margin-right: 5px; text-align: center; border-radius: 0; font-size: 22pt"
+                                       class="form-control">
+                                <input type="text" maxlength="1"
+                                       style="padding-right: 12px; margin-right: 5px; text-align: center; font-size: 22pt"
+                                       class="form-control">
+                                <input type="text" maxlength="1"
+                                       style="padding-right: 12px; margin-right: 5px; text-align: center; font-size: 22pt"
+                                       class="form-control">
+                                <input type="text" maxlength="1"
+                                       style="padding-right: 12px; margin-right: 5px; text-align: center; font-size: 22pt"
+                                       class="form-control">
+                                <input type="text" maxlength="1"
+                                       style="padding-right: 12px; margin-right: 5px; text-align: center; font-size: 22pt"
+                                       class="form-control">
+                                <input type="text" maxlength="1"
+                                       style="padding-right: 12px; margin-right: 10px; text-align: center; border-radius: 0; font-size: 22pt"
+                                       class="form-control">
                             </div>
-                        {% endif %}
-						<form action="{% url 'sign_in' %}" method="post">
-                            {% csrf_token %}
-							<div class="form-group mb-3">
-								<label>Email</label>
-								<div class="input-group input-group-icon">
-									<input name="email" type="email" class="form-control form-control-lg"/>
-									<span class="input-group-addon">
-										<span class="icon icon-lg">
-											<i class="fa fa-user"></i>
-										</span>
-									</span>
-								</div>
-							</div>
-
-							<div class="form-group mb-3">
-								<div class="clearfix">
-									<label class="float-left">Password</label>
-									<a href="{% url 'forgetpassword' %}" class="float-right">Forget Password?</a>
-								</div>
-								<div class="input-group input-group-icon">
-									<input name="password" type="password" class="form-control form-control-lg" />
-									<span class="input-group-addon">
-										<span class="icon icon-lg">
-											<i class="fa fa-lock"></i>
-										</span>
-									</span>
-								</div>
-							</div>
-
-							<div class="mb-1 text-center">
-								<button class="btn mb-2 ml-1 btn-block mr-1 btn-primary" type="submit">Sign In</button>
-							</div>
-
-                            <div class="mb-1 text-center hidden">
-								 <a class="btn mb-2 ml-1 btn-block mr-1 btn-secondary" href="{% url 'sign_up' %}">Signup</a>
-							</div>
-                        </form>
-					</div>
-				</div>
-
-			</div>
-		</section>
-		<!-- end: page -->
-
-		<!-- Vendor -->
-
-		<script src="{% static 'client/assets/vendor/jquery/jquery.js' %}"></script>
-		<script src="{% static 'client/assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js' %}"></script>
-		<script src="{% static 'client/assets/vendor/popper/umd/popper.min.js' %}"></script>
-		<script src="{% static 'client/assets/vendor/bootstrap/js/bootstrap.js' %}"></script>
-		<script src="{% static 'client/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
-		<script src="{% static 'client/assets/vendor/common/common.js' %}"></script>
-		<script src="{% static 'client/assets/vendor/nanoscroller/nanoscroller.js' %}"></script>
-		<script src="{% static 'client/assets/vendor/magnific-popup/jquery.magnific-popup.js' %}"></script>
-		<script src="{% static 'client/assets/vendor/jquery-placeholder/jquery-placeholder.js' %}"></script>
-
-		<!-- Specific Page Vendor -->
-		<script src="{% static 'client/assets/vendor/jquery-appear/jquery-appear.js' %}"></script>
-		<script src="{% static 'client/assets/vendor/owl.carousel/owl.carousel.js' %}"></script>
-		<script src="{% static 'client/assets/vendor/isotope/isotope.js' %}"></script>
-
-		<!-- Theme Base, Components and Settings -->
-		<script src="{% static 'client/assets/js/theme.js' %}"></script>
-
-		<!-- Theme Custom -->
-		<script src="{% static 'client/assets/js/custom.js' %}"></script>
-
-		<!-- Theme Initialization Files -->
-		<script src="{% static 'client/assets/js/theme.init.js' %}"></script>
+                        </div>
 
 
-	</body>
+                        <div class="text-center">
+                            <button style="background-color: #70AD47; border: 3px solid #70AD47; margin-top: 50px; width: 230px"
+                                    class="btn mb-2 btn-primary" type="button" id="btn_validate">Validate
+                            </button>
+                        </div>
+
+
+                        <div class="text-center">
+                            <button style="background-color: #F67C2A; border: 3px solid #F67C2A; margin-top: 30px"
+                                    class="btn mb-2 btn-primary" type="button" id="btn_send_code_again">Send Code Again
+                            </button>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Vendor -->
+
+<script src="{% static 'client/assets/vendor/jquery/jquery.js' %}"></script>
+<script src="{% static 'client/assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js' %}"></script>
+<script src="{% static 'client/assets/vendor/popper/umd/popper.min.js' %}"></script>
+<script src="{% static 'client/assets/vendor/bootstrap/js/bootstrap.js' %}"></script>
+<script src="{% static 'client/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+<script src="{% static 'client/assets/vendor/common/common.js' %}"></script>
+<script src="{% static 'client/assets/vendor/nanoscroller/nanoscroller.js' %}"></script>
+<script src="{% static 'client/assets/vendor/magnific-popup/jquery.magnific-popup.js' %}"></script>
+<script src="{% static 'client/assets/vendor/jquery-placeholder/jquery-placeholder.js' %}"></script>
+
+<!-- Specific Page Vendor -->
+<script src="{% static 'client/assets/vendor/jquery-appear/jquery-appear.js' %}"></script>
+<script src="{% static 'client/assets/vendor/owl.carousel/owl.carousel.js' %}"></script>
+<script src="{% static 'client/assets/vendor/isotope/isotope.js' %}"></script>
+
+<!-- Theme Base, Components and Settings -->
+<script src="{% static 'client/assets/js/theme.js' %}"></script>
+
+<!-- Theme Custom -->
+<script src="{% static 'client/assets/js/custom.js' %}"></script>
+
+<!-- Theme Initialization Files -->
+<script src="{% static 'client/assets/js/theme.init.js' %}"></script>
+
+
+<script>
+
+    var verifycode = '';
+
+
+    var inpupts = $('.every_number').find('input');
+    $('#btn_validate').click(function () {
+        var verifycode_confirm = '';
+        for (var i = 0; i < inpupts.length; i++) {
+            if ($(inpupts[i]).val() === "") {
+                alert("Please enter your full verify code");
+                return;
+            }
+            verifycode_confirm += $(inpupts[i]).val();
+            console.log($(inpupts[i]).val())
+        }
+
+        if (verifycode != verifycode_confirm) {
+            alert("Wrong code");
+            verifycode_confirm = "";
+            return;
+        }
+
+        $('#form_phone_verify').submit();
+    });
+
+    $(inpupts[0]).keyup(function () {
+        $(inpupts[1]).focus();
+    });
+
+    $(inpupts[1]).keyup(function () {
+        $(inpupts[2]).focus();
+    });
+
+    $(inpupts[2]).keyup(function () {
+        $(inpupts[3]).focus();
+    });
+
+    $(inpupts[3]).keyup(function () {
+        $(inpupts[4]).focus();
+    });
+
+    $(inpupts[4]).keyup(function () {
+        $(inpupts[5]).focus();
+    });
+
+    $(inpupts[5]).keyup(function () {
+        $(inpupts[6]).focus();
+    });
+
+
+
+
+    $('#btn_login').click(function () {
+        initializeInputBox();
+        var email = $('input[name="email"]').val();
+        var password = $('input[name="password"]').val();
+
+        $.ajax({
+            type: 'post',
+            url: 'signin',
+            data: {
+                email: email,
+                password: password,
+                csrfmiddlewaretoken: $('{% csrf_token %}').val()
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.error_message !== "") {
+                    alert(data.error_message)
+                } else {
+                    verifycode = data.result.verifycode;
+                    alert(verifycode)
+                    $('#modal_verifycode').modal();
+                }
+            },
+            error: function (data) {
+            }
+        })
+    });
+
+
+    $('#btn_send_code_again').click(function () {
+        initializeInputBox();
+        var email = $('input[name="email"]').val();
+        var password = $('input[name="password"]').val();
+
+        $.ajax({
+            type: 'post',
+            url: 'signin',
+            data: {
+                email: email,
+                password: password,
+                csrfmiddlewaretoken: $('{% csrf_token %}').val()
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.error_code === 0) {
+                    if (data.error_message !== "") {
+                        alert(data.error_message)
+                    } else {
+                        verifycode = data.result.verifycode;
+                        alert(verifycode)                              // verify alert for testing, please delete after check
+                    }
+                } else {
+                    alert(data.error_message)
+                }
+            },
+            error: function (data) {
+            }
+        })
+    });
+
+
+    function initializeInputBox() {
+        for (var i = 0; i < inpupts.length; i++) {
+            $(inpupts[i]).val("")
+        }
+    }
+
+
+</script>
+
+
+</body>
 </html>
